@@ -8,11 +8,10 @@ export const dataSourceOptions: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: Number(process.env.DB_PORT),
-  entities: ['dist/**/*.entity.js'],
+  entities: ['**/*.entity.js'],
   migrations: ['dist/db/migrations/*.js'],
   synchronize: process.env.DB_SYNC === 'true',
 };
 
 const dataSource = new DataSource(dataSourceOptions);
 export default dataSource;
-2

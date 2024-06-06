@@ -71,3 +71,18 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## How migrations work
+
+- .entity.ts are directly related to tables on our database,
+- changes done to .entity.ts files are made as a migration script then ran on database as queries
+
+## New migrations on database
+
+npm run migration:generate -- db/migrations/{NewMigrationName}
+
+npm run migration:run
+
+## Drop migrations on database
+
+npm run migration:revert
