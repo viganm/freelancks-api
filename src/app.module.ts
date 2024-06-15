@@ -9,11 +9,12 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env', 
-      isGlobal: true
+      envFilePath: '.env',
+      isGlobal: true,
     }),
-    TypeOrmModule.forRoot(dataSourceOptions), 
-    UserModule],
+    TypeOrmModule.forRoot(dataSourceOptions),
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
