@@ -11,6 +11,6 @@ export class Users {
   @Column({ nullable: true })
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 60 })
   password: string;
 }

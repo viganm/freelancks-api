@@ -12,15 +12,18 @@ export class UserService {
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
   ) {}
-  
+
   async create(createUserDto: CreateUserDto) {
-    try{
+    try {
       const salt = await bcrypt.genSalt(12);
-      const hashPass = await bcrypt.hash(createUserDto.password, salt)
-      const newUser = this.usersRepository.save({email: createUserDto.email, password: hashPass })
-      console.log(newUser)
+      const hashPass = await bcrypt.hash(createUserDto.password, salt);
+      const newUser = this.usersRepository.save({
+        email: createUserDto.email,
+        password: hashPass,
+      });
+      console.log(newUser);
       return newUser;
-    }catch(error){
+    } catch (error) {
       throw new Error('Error creating a User');
     }
   }
@@ -30,13 +33,12 @@ export class UserService {
   }
 
   async findOneForLogin(email: string, password: string) {
-    try{
-      const foundUser = await this.usersRepository.findOneBy({email: email})
-      if (!foundUser) throw new Error('User not found');
-      console.log('user',foundUser.password)
-      const isMatch = await bcrypt.compare(foundUser.password, password);
+    try {
+      const foundUser = await this.usersRepository.findOneBy({ email: email });
+      if (!foundUser) throw new UnauthorizedException('User not found');
+      const isMatch = await bcrypt.compare(password, foundUser.password);
       if (isMatch) return foundUser;
-    }catch(error){
+    } catch (error) {
       console.error('Error in findOneForLogin:', error.message);
       throw new Error('Error validating password');
     }
@@ -46,6 +48,7 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
