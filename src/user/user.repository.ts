@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Users } from './entities/user.entity';
+import { Users } from './entities/users.entity';
 
 export interface UserRepository extends Repository<Users> {
   this: Repository<Users>;
