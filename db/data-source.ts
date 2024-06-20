@@ -10,7 +10,6 @@ export const dataSourceOptions: DataSourceOptions = {
   port: Number(process.env.DB_PORT),
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/db/migrations/*.js'],
-  synchronize: process.env.DB_SYNC === 'true',
 };
 
 const dataSource = new DataSource(dataSourceOptions);
