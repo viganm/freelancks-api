@@ -84,3 +84,6 @@ npm run migration:run
 ## Drop migrations on database
 
 npm run migration:revert
+
+## docker building
+docker run --name core -e POSTGRES_PASSWORD=vigan123 -d -p 5432:15432 -v postgres_data:/var/lib/postgresql/data postgres
