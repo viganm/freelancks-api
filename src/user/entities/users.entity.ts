@@ -13,4 +13,7 @@ export class Users {
 
   @Column({ nullable: true, length: 60 })
   password: string;
+
+  @Column({ nullable: true })
+  google_id: string;
 }
