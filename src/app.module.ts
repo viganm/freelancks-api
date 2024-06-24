@@ -13,8 +13,10 @@ import { AuthModule } from './auth/auth.module';
       envFilePath: '.env',
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot(dataSourceOptions), 
-    UserModule, AuthModule],
+    TypeOrmModule.forRoot(dataSourceOptions),
+    UserModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

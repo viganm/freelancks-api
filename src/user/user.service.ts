@@ -21,7 +21,6 @@ export class UserService {
         email: createUserDto.email,
         password: hashPass,
       });
-      console.log(newUser);
       return newUser;
     } catch (error) {
       throw new Error('Error creating a User');
@@ -44,13 +43,15 @@ export class UserService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOneGoogle(googleId: string, email: string) {
+    return await this.usersRepository.findOne({
+      where: [{ google_id: googleId }, { email: email }],
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.usersRepository.update(id, updateUserDto);
   }
 
   remove(id: number) {
