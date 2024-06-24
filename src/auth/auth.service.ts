@@ -35,27 +35,33 @@ export class AuthService {
   }
 
   async googleLogin(user: any): Promise<any> {
-    let payload = {};
-    const existingUser = await this.userService.findOneGoogle(
-      user.id,
-      user.emails[0].value,
-    );
-    if (existingUser) {
-      if (existingUser.google_id === null) {
-        await this.userService.update(existingUser.id, { google_id: user.id });
-      } else if (existingUser.email === null) {
-        await this.userService.update(existingUser.id, {
+    try {
+      let payload = {};
+      const existingUser = await this.userService.findOneGoogle(
+        user.id,
+        user.emails[0].value,
+      );
+      if (existingUser) {
+        if (existingUser.google_id === null) {
+          await this.userService.update(existingUser.id, {
+            google_id: user.id,
+          });
+        } else if (existingUser.email === null) {
+          await this.userService.update(existingUser.id, {
+            email: user.emails[0].value,
+          });
+        }
+        payload = { userId: existingUser.id, userEmail: existingUser.email };
+      } else {
+        const newUser = await this.userService.create({
           email: user.emails[0].value,
+          google_id: user.id,
         });
+        payload = { userId: newUser.id, userEmail: newUser.email };
       }
-      payload = { userId: existingUser.id, userEmail: existingUser.email };
-    } else {
-      const newUser = await this.userService.create({
-        email: user.emails[0].value,
-        google_id: user.id,
-      });
-      payload = { userId: newUser.id, userEmail: newUser.email };
+      return { access_token: await this.jwtService.signAsync(payload) };
+    } catch (error) {
+      throw new Error('Error validating google login');
     }
-    return { access_token: await this.jwtService.signAsync(payload) };
   }
 }
