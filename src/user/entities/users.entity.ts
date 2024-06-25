@@ -16,4 +16,7 @@ export class Users {
 
   @Column({ nullable: true })
   google_id: string;
+
+  @Column({ default: 'user' })
+  role: string;
 }
