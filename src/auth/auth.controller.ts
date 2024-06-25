@@ -14,32 +14,39 @@ import { Users } from 'src/user/entities/users.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Response } from 'express';
 import { GoogleAuthGuard } from './utils/Guards';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { LoginDto } from './utils/login.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiTags('Auth')
+  @ApiOperation({ summary: 'Login' })
+  @ApiResponse({ status: 200, description: 'Login' })
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-    @Res() res: Response,
-  ): Promise<void> {
-    const { access_token } = await this.authService.login(email, password);
+  async login(@Body() loginDto: LoginDto, @Res() res: Response): Promise<void> {
+    const { access_token } = await this.authService.login(loginDto);
     res.cookie('access_token', access_token, {
       httpOnly: true,
       maxAge: 3600000, // 1 hour
     });
-    res.send({ message: 'Login successful' });
+    res.send({ access_token });
   }
 
+  @ApiTags('Auth')
+  @ApiOperation({ summary: 'Register' })
+  @ApiResponse({ status: 200, description: 'Register' })
   @HttpCode(HttpStatus.OK)
   @Post('register')
   async register(@Body() user: CreateUserDto): Promise<Users> {
     return await this.authService.register(user);
   }
 
+  @ApiTags('Auth')
+  @ApiOperation({ summary: 'Google Login' })
+  @ApiResponse({ status: 200, description: 'Google Login' })
   @Get('google/login')
   @UseGuards(GoogleAuthGuard)
   handleLogin() {
@@ -47,6 +54,9 @@ export class AuthController {
   }
 
   // api/auth/google/redirect
+  @ApiTags('Auth')
+  @ApiOperation({ summary: 'Google Login Redirect' })
+  @ApiResponse({ status: 200, description: 'Google Login Redirect' })
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async handleRedirect(@Res() res: Response, @Req() req) {
