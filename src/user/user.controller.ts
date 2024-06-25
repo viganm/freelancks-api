@@ -12,6 +12,9 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/utils/Guards';
+import { Roles } from 'src/auth/utils/role.decorator';
+import { Role } from 'src/auth/utils/role.enum';
 
 @Controller('user')
 export class UserController {
@@ -22,8 +25,9 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
+  @Roles(Role.Admin)
   findAll() {
     return this.userService.findAll();
   }

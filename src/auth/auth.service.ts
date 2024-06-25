@@ -18,7 +18,11 @@ export class AuthService {
     try {
       const user = await this.userService.findOneForLogin(email, password);
       if (user.id && user.email) {
-        const payload = { userId: user.id, userEmail: user.email };
+        const payload = {
+          userId: user.id,
+          userEmail: user.email,
+          role: user.role,
+        };
         return {
           access_token: await this.jwtService.signAsync(payload),
         };
@@ -51,13 +55,21 @@ export class AuthService {
             email: user.emails[0].value,
           });
         }
-        payload = { userId: existingUser.id, userEmail: existingUser.email };
+        payload = {
+          userId: existingUser.id,
+          userEmail: existingUser.email,
+          role: existingUser.role,
+        };
       } else {
         const newUser = await this.userService.create({
           email: user.emails[0].value,
           google_id: user.id,
         });
-        payload = { userId: newUser.id, userEmail: newUser.email };
+        payload = {
+          userId: newUser.id,
+          userEmail: newUser.email,
+          role: newUser.role,
+        };
       }
       return { access_token: await this.jwtService.signAsync(payload) };
     } catch (error) {
