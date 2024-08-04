@@ -28,10 +28,8 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response): Promise<void> {
     const { access_token } = await this.authService.login(loginDto);
-    res.cookie('access_token', access_token, {
-      httpOnly: true,
-      maxAge: 3600000, // 1 hour
-    });
+    // Save access token in Authorization header
+    res.setHeader('Authorization', `Bearer ${access_token}`);
     res.send({ access_token });
   }
 

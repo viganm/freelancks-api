@@ -7,7 +7,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.use(cookieParser());
-  const config = await new DocumentBuilder()
+  const config = new DocumentBuilder()
+    .addCookieAuth('access_token', {
+      type: 'http',
+      in: 'Header',
+      scheme: 'Bearer',
+      name: 'access_token',
+    })
     .setTitle('Freelande API')
     .setDescription('API FreelandeKS')
     .setVersion('1.0')

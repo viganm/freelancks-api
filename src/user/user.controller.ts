@@ -15,7 +15,12 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/utils/Guards';
 import { Roles } from 'src/auth/utils/role.decorator';
 import { Role } from 'src/auth/utils/role.enum';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiCookieAuth,
+} from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -32,9 +37,10 @@ export class UserController {
   @ApiTags('Users')
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Returns all users' })
+  @ApiCookieAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User, Role.Admin)
   @Get()
-  @Roles(Role.User)
   findAll() {
     return this.userService.findAll();
   }

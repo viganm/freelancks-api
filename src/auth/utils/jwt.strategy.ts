@@ -8,9 +8,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: any) => {
+          let fullToken = null;
           let token = null;
-          if (request && request.cookies) {
-            token = request.cookies['access_token'];
+          if (request && request.headers) {
+            fullToken = request.headers['authorization'];
+            token = fullToken ? fullToken.replace('Bearer ', '') : null;
           }
           return token;
         },
